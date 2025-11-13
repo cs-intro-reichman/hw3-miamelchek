@@ -43,29 +43,15 @@ public class LoanCalc {
 	// Side effect: modifies the class variable iterationCounter.
     public static double bruteForceSolver(double loan, double rate, int n, double epsilon) {
 		iterationCounter = 0;
+		// ניחוש התחלתי קטן שממנו נוכל להתחיל
 		double payment = loan / n;
-		// בהתחלה נגדיר את הצעד גדוליחסית כדי שהפעולה לא תיקח נצח מדובר במספרים מאוד גדולים
-		double payStep = 10;
-		double balance = endBalance(loan, rate, n, payment);
-		double prevBal   = endBalance(loan, rate, n, payment);
-		while (Math.abs(balance) > epsilon) {
-			if (balance > 0) {
-				payment += payStep;
-			}else{
-				payment -= payStep;
-			}
+		//נבדוק שוב ושוב אם התשלום שלנו מספיק ואם לא נגדיל אותו במספר קטן וברגע נשלם יותר נקבל שזה יותר מאפס ונעצור עם סטייה קטנה של אפסילון
+		while (endBalance(loan, rate, n, payment) > 0) {
+				payment += epsilon;
 			iterationCounter++;
-			balance = endBalance(loan, rate, n, payment);
-			// בודקים אם הסימן התחלף וירדנו יותר מידי ואז אפשר לתקן את הצעד להיות קטן יותר כדי להגיע לטווח הטעות המבוקש
-			if (balance * prevBal < 0) {
-				payStep /= 10.0;                  
-				if (payStep < epsilon) break;  
-			}
-			prevBal = balance;
 		}
 		return payment;
-    }
-    
+    }    
     // Uses bisection search to compute an approximation of the periodical payment 
 	// that will bring the ending balance of a loan close to 0.
 	// Given: the sum of the loan, the periodical interest rate (as a percentage),
@@ -73,9 +59,12 @@ public class LoanCalc {
 	// Side effect: modifies the class variable iterationCounter.
     public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
 		iterationCounter = 0;
+		// ניחוש תשלום קטן מידי
 		double lowPay = loan / n;
+		// ניחוש תשלום גדול מאוד
 		double hiPay = loan * (1 + rate / 100);
 		double midPay = (hiPay + lowPay) / 2;
+		// נבדוק אם הטווח בין התשלומים גדול אם הוא גדול נבדוק אם שילמנו יותר מידי או פחות מידי ובהתאם נשנה את הגבולות עד שהטווח יהיה קטן מאפסילון וככה נמצא את התשלום הנכון
 		while (hiPay - lowPay > epsilon) {
 			if (endBalance(loan, rate, n, midPay) < 0) {
 				hiPay = midPay;
