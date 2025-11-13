@@ -27,6 +27,11 @@ public class Anagram {
 	}  
 
 	// Returns true if the two given strings are anagrams, false otherwise.
+	/**
+	 * @param str1
+	 * @param str2
+	 * @return
+	 */
 	public static boolean isAnagram(String str1, String str2) {
 		String word1 = preProcess(str1);
 		String word2 = preProcess(str2);
@@ -40,14 +45,8 @@ public class Anagram {
 				letter1 = word1.charAt(0);
 				boolean isEqual = false;
 				
-				if (letter1 == ' ') {
-					word1 = word1.substring(1); // להסיר את הרווח מההתחלה
-					continue;                   // ולהמשיך לסיבוב הבא
-				}	
-
 				for(int j = 0; j < word2.length();j++){
-				letter2 = word2.charAt(j);
-				if (letter2 == ' ') continue;
+					letter2 = word2.charAt(j);
 					if (letter1 == letter2) {
 						word2 = word2.substring(0, j) + word2.substring(j + 1);
 						word1 = word1.substring(1);
@@ -67,7 +66,7 @@ public class Anagram {
 	// to lower-case, and all the other characters are deleted, except for spaces, which are left
 	// as is. For example, the string "What? No way!" becomes "whatnoway"
 	public static String preProcess(String str) {
-		String abcCheck = " abcdefghijklmnopqrstuvwxyz";
+		String abcCheck = "abcdefghijklmnopqrstuvwxyz";
 		String newWord = "";
 		String lowerCase = str.toLowerCase();
 		for(int i = 0;i < lowerCase.length(); i++ ){
