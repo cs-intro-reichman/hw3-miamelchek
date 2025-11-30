@@ -1,3 +1,6 @@
+/* Feedback:
+great work! */
+
 public class Algebra {
 	public static void main(String args[]) {
 	    // Tests some of the operations
